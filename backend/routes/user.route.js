@@ -9,7 +9,7 @@ router.post("/signup",validate.userRegisterValidationRules,userController.regist
 
 router.post("/signin",validate.userLoginValidationRules,userController.signinUser)
 
-router.get("/profile",authUser,userController.getUserProfile)
+router.get("/me",authUser,userController.getUserProfile)
 
 router.put("/updateProfile",authUser,validate.userUpdateValidationRules,userController.updateUserProfile)
 

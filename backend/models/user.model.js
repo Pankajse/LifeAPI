@@ -17,7 +17,11 @@ const userSchema = mongoose.Schema({
     password : {
         type : String,
         required : true,
-        minLength : [8,"Password should be more than 8 characters"]
+        minLength : [8,"Password should be more than 8 characters"],
+        select : false
+    },
+    socketId : {
+        type : String
     }
 });
 
@@ -35,6 +39,6 @@ userSchema.statics.hashPassword = async (password)=>{
     return hash;
 }
 
-const UserModel = mongoose.model("User",userSchema);
+const UserModel = mongoose.model("user",userSchema);
 
 exports.UserModel = UserModel;

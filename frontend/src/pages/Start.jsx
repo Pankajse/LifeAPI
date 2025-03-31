@@ -10,7 +10,7 @@ const Start = () => {
         <h3 className='text-2xl font-semibold'>Request Blood </h3>
         <h3 className='text-2xl font-semibold '>Specify your needs</h3>
         </div>
-        <Link to='/signin' className='bg-red-800 w-60 text-white font-normal text-lg text-center py-2 px-2 rounded-xl'>Get Started</Link>
+        <Link to='/login-options' className='bg-red-800 w-60 text-white font-normal text-lg text-center py-2 px-2 rounded-xl'>Get Started</Link>
     </div>
   )
 }

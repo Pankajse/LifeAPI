@@ -8,20 +8,16 @@ const userRegisterValidationRules = [
   body("email").isEmail().withMessage("Email should be more than 8 characters").
     isLength({ min: 5 }).withMessage("Enter valid Email").normalizeEmail(),
 
-  body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long").
-    matches(/[A-Z]/).withMessage("Password must contain at least one uppercase letter").
-    matches(/[0-9]/).withMessage("Password must contain at least one number").
-    matches(/[\W_]/).withMessage("Password must contain at least one special character"),
+  body("password").notEmpty().withMessage('Password is required')
+  .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),
 ]
 
 const userLoginValidationRules = [
   body("email").isEmail().withMessage("Email should be more than 8 characters").
     isLength({ min: 5 }).withMessage("Enter valid Email").normalizeEmail(),
 
-  body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long").
-    matches(/[A-Z]/).withMessage("Password must contain at least one uppercase letter").
-    matches(/[0-9]/).withMessage("Password must contain at least one number").
-    matches(/[\W_]/).withMessage("Password must contain at least one special character"),
+  body("password").isLength({ min: 8 }).notEmpty().withMessage('Password is required')
+  .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),
 ]
 
 const userUpdateValidationRules = [
@@ -37,11 +33,8 @@ const userUpdateValidationRules = [
     .normalizeEmail(),
 
   body("password")
-    .optional()
-    .isLength({ min: 8 }).withMessage("Password must be at least 8 characters long")
-    .matches(/[A-Z]/).withMessage("Password must contain at least one uppercase letter")
-    .matches(/[0-9]/).withMessage("Password must contain at least one number")
-    .matches(/[\W_]/).withMessage("Password must contain at least one special character"),
+    .optional().notEmpty().withMessage('Password is required')
+    .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),
 
   body("age")
     .optional()
@@ -84,10 +77,68 @@ const getDistanceTimeValidationRules = [
     .isLength({ min: 3 }).withMessage("Destination should be at least 3 characters long")
 ];
 
+const orgRegistrationValidationRules = [
+    // orgName validation
+    body('orgName')
+      .notEmpty().withMessage('Organization name is required')
+      .isLength({ min: 3 }).withMessage('Organization name should be more than 3 characters')
+      .trim(),
+
+    // email validation
+    body('email')
+      .notEmpty().withMessage('Email is required')
+      .isEmail().withMessage('Invalid email format')
+      .isLength({ min: 8 }).withMessage('Email should be more than 8 characters')
+      .normalizeEmail(),
+
+    // password validation
+    body('password')
+      .notEmpty().withMessage('Password is required')
+      .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),
+
+    // address validation
+    body('address')
+      .notEmpty().withMessage('Address is required')
+      .trim(),
+
+    // orgType validation
+    body('orgType')
+      .notEmpty().withMessage('Organization type is required')
+      .isIn(['bloodbank', 'hospital', 'ngo']).withMessage('Invalid organization type'),
+
+    // contactNumber validation
+    body('contactNumber')
+      .notEmpty().withMessage('Contact number is required')
+      .isLength({ min: 10 }).withMessage('Contact number should be at least 10 digits')
+      .isMobilePhone().withMessage('Invalid phone number')
+      .trim(),
+
+    // registrationNumber validation (optional)
+    body('registrationNumber')
+      .optional()
+      .trim()
+  ];
+
+  const orgSigninValidationRules = [
+    body('email')
+      .notEmpty().withMessage('Email is required')
+      .isEmail().withMessage('Invalid email format')
+      .isLength({ min: 8 }).withMessage('Email should be more than 8 characters')
+      .normalizeEmail(),
+
+    // password validation
+    body('password')
+      .notEmpty().withMessage('Password is required')
+      .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),
+  ]
+
+
 module.exports = {
   userRegisterValidationRules,
   userLoginValidationRules,
   userUpdateValidationRules,
   autoSuggestionValidationRules,
-  getDistanceTimeValidationRules
+  getDistanceTimeValidationRules,
+  orgRegistrationValidationRules,
+  orgSigninValidationRules
 };

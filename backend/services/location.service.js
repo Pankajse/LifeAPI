@@ -1,4 +1,7 @@
 const axios = require("axios");
+const { UserModel } = require("../models/user.model");
+const DonateBloodModel = require("../models/donateBlood.model");
+const OrgModel = require("../models/org.model");
 
 module.exports.getDistanceTime = async (origin, destination) => {
     if(!origin || !destination){
@@ -39,4 +42,54 @@ module.exports.getAutoSuggestions = async (input) => {
         console.log(error);
         throw error;
     }
+}
+
+module.exports.getAddressCoordinates = async (address) => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    try {
+        const response = await axios.get(url);
+        const data = response.data;
+        if (data.status === "OK") {
+            const location = data.results[0].geometry.location;
+            return {
+                ltd : location.lat,
+                lng : location.lng
+            }
+        } else {
+            throw new Error("Error fetching data from Google Maps API");
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+module.exports.getUsersInTheRadius = async (ltd, lng, radius) => {
+    if(!ltd || !lng || !radius){
+        throw new Error("Latitude, Longitude and Radius are required");
+    }
+    const users = await DonateBloodModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+            }
+        }
+    }).populate('user');
+
+    return users;
+}
+
+module.exports.getOrgsInTheRadius = async (ltd, lng, radius) => {
+    if(!ltd || !lng || !radius){
+        throw new Error("Latitude, Longitude and Radius are required");
+    }
+    const orgs = await OrgModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+            }
+        }
+    }).populate('donateBlood');
+
+    return orgs;
 }
