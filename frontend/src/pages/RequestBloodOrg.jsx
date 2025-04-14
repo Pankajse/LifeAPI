@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import RequestBloodForm from '../components/RequestBloodForm';
+import RequestBloodFormOrg from '../components/RequestBloodformOrg';
 
-const RequestBlood = () => {
+const RequestBloodOrg = () => {
     const navigate = useNavigate();
 
     return (
@@ -24,9 +24,9 @@ const RequestBlood = () => {
                     <i className="ri-notification-2-line text-2xl text-gray-800"></i>
                 </div>
             </div >
-            <RequestBloodForm/>
+            <RequestBloodFormOrg/>
         </div>
     );
 };
 
-export default RequestBlood;
+export default RequestBloodOrg;

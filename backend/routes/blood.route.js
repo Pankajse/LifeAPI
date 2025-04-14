@@ -1,14 +1,14 @@
 const express = require("express");
-const { authUser } = require("../middlewares/auth.middleware");
+const { auth } = require("../middlewares/auth.middleware");
 const bloodController = require("../controllers/blood.controller");
 const router = express.Router();
 
-router.post('/donate-blood-form',authUser,bloodController.donateBloodform)
-router.delete('/delete-donate-blood-form',authUser,bloodController.deleteDonateBloodForm)
+router.post('/donate-blood-form',auth,bloodController.donateBloodform)
+router.delete('/delete-donate-blood-form',auth,bloodController.deleteDonateBloodForm)
 
-router.post('/request-blood-form',authUser,bloodController.requestBloodform)
-router.get('/nearby-donors-orgs', authUser, bloodController.nearbydonorsOrgsByBloodType)
-router.post('/request-blood-form-update',authUser,bloodController.requestBloodFormUpdate)
-router.delete('/delete-request-blood-form',authUser,bloodController.deleteRequestBloodForm)
+router.post('/request-blood-form',auth,bloodController.requestBloodform)
+router.get('/nearby-donors-orgs', auth, bloodController.nearbydonorsOrgsByBloodType)
+router.post('/request-blood-form-update',auth,bloodController.requestBloodFormUpdate)
+router.delete('/delete-request-blood-form',auth,bloodController.deleteRequestBloodForm)
 
 module.exports= router;

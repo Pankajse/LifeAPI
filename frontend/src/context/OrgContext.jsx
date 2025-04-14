@@ -18,7 +18,7 @@ const OrgContext = ({ children }) => {
                         }
                     });
                     if (response.status === 200) {
-                        setOrg(response.data.organization);
+                        setOrg(response.data.org);
                     }
                 }
             } catch (error) {

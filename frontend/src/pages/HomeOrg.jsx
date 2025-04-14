@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OrgDataContext } from '../context/OrgContext';
 import NavbarOrg from '../components/NavbarOrg';
@@ -8,10 +8,16 @@ import requestLogo from '../assets/icons/request.png';
 import campaignLogo from '../assets/icons/donate.png';
 import chatIcon from '../assets/icons/chatIcon.png';
 import inboxLogo from '../assets/icons/inboxLogo.jpg';
+import { SocketContext } from '../context/SocketContext';
 
 const HomeOrg = () => {
     const navigate = useNavigate();
     const { org } = useContext(OrgDataContext);
+    const { socket } = useContext(SocketContext);
+    useEffect(() => {
+            socket.emit('join', { userId: org._id, userType: 'org' });
+          }, [org]);
+    
 
     return (
         <div className="min-h-screen bg-red-800">
@@ -82,7 +88,7 @@ const HomeOrg = () => {
                         { 
                             logo: requestLogo, 
                             title: 'Request Blood', 
-                            onClick: () => navigate('/request-blood'),
+                            onClick: () => navigate('/request-blood-org'),
                             description: 'Get blood units'
                         },
                         { 
@@ -100,7 +106,7 @@ const HomeOrg = () => {
                         { 
                             logo: inboxLogo, 
                             title: 'Inbox', 
-                            onClick: () => navigate('/org/inbox'),
+                            onClick: () => navigate('/chats-org'),
                             description: 'View messages'
                         },
                     ].map((item, index) => (

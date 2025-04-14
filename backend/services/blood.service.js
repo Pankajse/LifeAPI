@@ -1,5 +1,6 @@
 const DonateBloodModel = require("../models/donateBlood.model");
 const RequestBloodModel = require("../models/requestBlood.model");
+const RequestBloodOrgModel = require("../models/requestBloodOrg.model");
 const { getAddressCoordinates,getUsersInTheRadius,getOrgsInTheRadius, getDistanceTime } = require("./location.service");
 
 const donateBloodForm = async({user,bloodType,healthStatus,contactNumber,homeAddress,availability,weight,age})=>{
@@ -25,6 +26,7 @@ const requestBloodForm = async ({user,bloodType,amount,address,contact,cause,sta
     if(!user || !bloodType || !amount || !address || !contact || !cause || status === undefined){
         throw new Error("All Fields are required");
     }
+    await RequestBloodModel.findOneAndDelete({user});
     const location = await getAddressCoordinates(address);
 
     const requestBloodResponse = await RequestBloodModel.create({
@@ -37,6 +39,17 @@ const requestBloodForm = async ({user,bloodType,amount,address,contact,cause,sta
         status
     });
     return requestBloodResponse
+}
+
+const requestBloodFormOrg = async ({org,bloodType,amount}) =>{
+    if(!org || !bloodType || !amount){
+        throw new Error("All Fields are required");
+    }
+    const response = await RequestBloodOrgModel.create({
+        organization : org,
+        bloodType,amount
+    });
+    return response;
 }
 
 const findRequestIdByUserId = async (userId) => {
@@ -62,37 +75,7 @@ const deleteDonateBloodForm = async(userId)=>{
     return response;
 }
 
-const nearbyDonors = async(location) => {
-    const users = await getUsersInTheRadius(location.ltd, location.lng, 30);
-    const updatedUsers = await Promise.all(users.map(async (user) => {
-        const distanceData = await getDistanceTime(
-            `${location.ltd},${location.lng}`,
-            `${user.location.ltd},${user.location.lng}`
-        );
-        return {
-            ...user.toObject(),
-            distance: distanceData.distance.text,
-            duration: distanceData.duration.text
-        };
-    }));
-    return updatedUsers;
-}
 
-const nearbyOrgs = async(location) => {
-    const orgs = await getOrgsInTheRadius(location.ltd, location.lng, 30);
-    const updatedOrgs = await Promise.all(orgs.map(async (org) => {
-        const distanceData = await getDistanceTime(
-            `${location.ltd},${location.lng}`,
-            `${org.location.ltd},${org.location.lng}`
-        );
-        return {
-            ...org.toObject(),
-            distance: distanceData.distance.text,
-            duration: distanceData.duration.text
-        };
-    }));
-    return updatedOrgs;
-}
 
 const nearbyDonorsByBloodType = async (location, bloodType) => {
     const users = await getUsersInTheRadius(location.ltd, location.lng, 30);
@@ -138,9 +121,8 @@ module.exports = {
     updateRequestBloodForm, 
     findRequestIdByUserId, 
     deleteRequestBloodForm, 
-    deleteDonateBloodForm, 
-    nearbyDonors, 
-    nearbyOrgs,
+    deleteDonateBloodForm,
     nearbyDonorsByBloodType, 
-    nearbyOrgsByBloodType 
+    nearbyOrgsByBloodType,
+    requestBloodFormOrg
 };

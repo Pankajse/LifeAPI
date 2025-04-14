@@ -26,7 +26,7 @@ const DonateBloodSub = () => {
       <div className='flex flex-col justify-between items-center'>
         <div className='flex flex-col gap-5 items-center justify-between pt-10' >
           <i className="ri-checkbox-circle-line text-red-700 font-medium text-5xl pt-10"></i>
-          <h4 className='text-xl font-semibold px-8 py-2 text-center' >Thank you! Your form has been successfully submitted. We will inform you as soon as any blood request recieved.</h4>
+          <h4 className='text-xl font-semibold px-8 py-2 text-center' >Your form has been successfully submitted. We will inform you as soon as any blood request recieved.</h4>
           <button
             onClick={async () => {
               const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/bloodServices/delete-donate-blood-form`, {

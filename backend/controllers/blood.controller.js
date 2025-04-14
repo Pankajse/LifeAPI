@@ -32,34 +32,79 @@ module.exports.requestBloodform = async(req,res)=>{
     }
 }
 
-module.exports.nearbydonorsOrgs = async(req,res)=>{
-    const user = req.user;
-    try {
-        const requestBloodForm = await RequestBloodModel.findOne({userId : user._id});
-        if(!requestBloodForm){
-            return res.status(400).json({message : "Request blood form not found"})
-        }
-        const nearbyDonors = await bloodServices.nearbyDonors(requestBloodForm.location);
-
-        const nearbyOrgs = await bloodServices.nearbyOrgs(requestBloodForm.location);
-        return res.status(200).json({message : "Nearby donors found", nearbyDonors,nearbyOrgs});
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({message : "Internal Server Error",error});
-    }
-}
+// module.exports.nearbydonorsOrgsByBloodType = async (req, res) => {
+//     const user = req.user;
+//     try {
+//         const requestBloodForm = await RequestBloodModel.findOne({ user : user._id });
+//         if (!requestBloodForm) {
+//             return res.status(400).json({ message: "Request blood form not found" });
+//         }
+//         const bloodType = requestBloodForm.bloodType;
+//         const nearbyDonors = await bloodServices.nearbyDonorsByBloodType(requestBloodForm.location, bloodType);
+//         const nearbyOrgs = await bloodServices.nearbyOrgsByBloodType(requestBloodForm.location, bloodType);
+//         return res.status(200).json({ message: "Nearby donors and organizations found", nearbyDonors, nearbyOrgs });
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({ message: "Internal Server Error", error });
+//     }
+// };
 
 module.exports.nearbydonorsOrgsByBloodType = async (req, res) => {
     const user = req.user;
     try {
-        const requestBloodForm = await RequestBloodModel.findOne({ user : user._id });
+        const requestBloodForm = await RequestBloodModel.findOne({ user: user._id });
         if (!requestBloodForm) {
             return res.status(400).json({ message: "Request blood form not found" });
         }
+        
         const bloodType = requestBloodForm.bloodType;
-        const nearbyDonors = await bloodServices.nearbyDonorsByBloodType(requestBloodForm.location, bloodType);
-        const nearbyOrgs = await bloodServices.nearbyOrgsByBloodType(requestBloodForm.location, bloodType);
-        return res.status(200).json({ message: "Nearby donors and organizations found", nearbyDonors, nearbyOrgs });
+        const [nearbyDonors, nearbyOrgs] = await Promise.all([
+            bloodServices.nearbyDonorsByBloodType(requestBloodForm.location, bloodType),
+            bloodServices.nearbyOrgsByBloodType(requestBloodForm.location, bloodType)
+        ]);
+
+        // Transform donors data
+        const transformedDonors = nearbyDonors.map(donor => ({
+            _id: donor.user._id,
+            name: donor.user.fullname,
+            type: 'user',
+            distance: donor.distance,
+            duration: donor.duration,
+            bloodGroup: donor.bloodType,
+            units: null, // Empty for users
+            contact: donor.contact,
+            availability: donor.availability.date,
+            weight: donor.weight,
+            age: donor.age,
+            location: donor.location,
+            email: donor.user.email
+        }));
+
+        // Transform organizations data
+        const transformedOrgs = nearbyOrgs.map(org => ({
+            _id: org._id,
+            name: org.orgName,
+            type: org.orgType,
+            distance: org.distance,
+            duration: org.duration,
+            bloodGroup: null, // Empty for organizations (since they have multiple)
+            units: org.donateBlood.totalUnits,
+            contact: org.contactNumber,
+            availability: null, // Empty for organizations
+            weight: null, // Empty for organizations
+            age: null, // Empty for organizations
+            location: org.location,
+            email: org.email,
+            bloodStock: org.donateBlood.bloodGroups // Include full blood stock details
+        }));
+
+        // Combine results
+        const results = [...transformedDonors, ...transformedOrgs];
+
+        return res.status(200).json({ 
+            message: "Nearby donors and organizations found", 
+            results 
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal Server Error", error });

@@ -6,6 +6,7 @@ import Signin from './pages/Signin';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import RequestBlood from './pages/RequestBlood';
+import RequestBloodOrg from './pages/RequestBloodOrg';
 import DonateBlood from './pages/DonateBlood';
 import Donors from './pages/Donors';
 import Profile from './pages/Profile';
@@ -19,6 +20,9 @@ import SigninOrg from './pages/SigninOrg';
 import HomeOrg from './pages/HomeOrg';
 import BloodStock from './pages/BloodStock';
 import DonateBloodOrg from './pages/DonateBloodOrg';
+import NearbyDonorsOrganizations from './pages/NearbyDonorsOrganizations';
+import ChatList from './pages/ChatList';
+import ChatListOrg from './pages/ChatListOrg';
 
 export const App = () => {
   return (
@@ -34,13 +38,17 @@ export const App = () => {
       <Route path='/request-blood' element={<RequestBlood/>} />
       <Route path='/donate-blood' element={<DonateBlood/>} />
       <Route path='/donate-blood-org' element={<DonateBloodOrg/>} />
+      <Route path='/request-blood-org' element={<RequestBloodOrg/>} />
       <Route path='/donate-blood-sub' element={<DonateBloodSub/>} />
       <Route path='/donors' element={<Donors/>} />
       <Route path='/profile' element={<Profile/>} />
       <Route path='/nearby-donors-orgs' element={<NearbyDonorsOrgs/>} />
+      <Route path='/nearby-donors-orgs-for-orgs' element={<NearbyDonorsOrganizations/>} />
       <Route path='/request-blood-later' element={<RequestBloodLater/>} />
       <Route path='/chatbot' element={<Chatbot/>} />
       <Route path='/blood-stock' element={<BloodStock/>} />
+      <Route path="/chats" element={<ChatList />} />
+      <Route path="/chats-org" element={<ChatListOrg />} />
     </Routes>
   )
 }

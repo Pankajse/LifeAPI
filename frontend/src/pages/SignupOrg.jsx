@@ -73,7 +73,7 @@ const SignupOrg = () => {
   };
 
   return (
-    <div className='flex flex-col h-screen items-center justify-center relative bottom-16 bg-gray-50'>
+    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-md bg-white p-8 rounded-lg shadow-md'>
         <h3 className='text-2xl font-semibold mb-6 text-center'>Organization Registration</h3>
         
@@ -83,9 +83,9 @@ const SignupOrg = () => {
           </div>
         )}
 
-        <form onSubmit={onSubmitHandler}>
+        <form onSubmit={onSubmitHandler} className='space-y-4'>
           {/* Organization Name */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Organization Name</label>
             <input
               name='orgName'
@@ -98,7 +98,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Email */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Email</label>
             <input
               type='email'
@@ -112,7 +112,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Password */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Password</label>
             <input
               type='password'
@@ -126,7 +126,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Confirm Password */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Confirm Password</label>
             <input
               type='password'
@@ -140,7 +140,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Organization Type */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Organization Type</label>
             <select
               name='orgType'
@@ -158,7 +158,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Address with Location Search */}
-          <div className='mb-4 relative'>
+          <div className='relative'>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Address</label>
             <input
               type='text'
@@ -187,7 +187,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Contact Number */}
-          <div className='mb-4'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Contact Number</label>
             <input
               type='tel'
@@ -201,7 +201,7 @@ const SignupOrg = () => {
           </div>
 
           {/* Registration Number (optional) */}
-          <div className='mb-6'>
+          <div>
             <label className='block text-gray-700 text-sm font-medium mb-1'>Registration Number</label>
             <input
               name='registrationNumber'
@@ -213,12 +213,14 @@ const SignupOrg = () => {
           </div>
 
           {/* Submit Button */}
-          <button
-            type='submit'
-            className='w-full bg-red-800 text-white py-2 px-4 rounded-lg hover:bg-red-900 transition-colors font-medium'
-          >
-            Register Organization
-          </button>
+          <div>
+            <button
+              type='submit'
+              className='w-full bg-red-800 text-white py-2 px-4 rounded-lg hover:bg-red-900 transition-colors font-medium'
+            >
+              Register Organization
+            </button>
+          </div>
         </form>
 
         <div className='mt-4 text-center'>

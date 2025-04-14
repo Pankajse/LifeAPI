@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const NearbyDonorsOrgs = () => {
+const NearbyDonorsOrganizations = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -11,7 +11,7 @@ const NearbyDonorsOrgs = () => {
     const fetchNearbyDonorsOrgs = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/bloodServices/nearby-donors-orgs', {
+        const response = await axios.get('http://localhost:3000/org/nearby-donors-orgs', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -42,7 +42,7 @@ const NearbyDonorsOrgs = () => {
       
       await axios.post(
         'http://localhost:3000/chats/connect',
-        { otherUserId: id, type : "user" },
+        { otherUserId: id, type : 'org' },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -173,4 +173,4 @@ const NearbyDonorsOrgs = () => {
   );
 };
 
-export default NearbyDonorsOrgs;
+export default NearbyDonorsOrganizations;

@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const { UserModel } = require("../models/user.model");
 const { BlacklistTokenModel } = require("../models/blacklist.model");
 const userService = require("../services/user.service");
+const DonateBloodModel = require("../models/donateBlood.model");
 
 module.exports.registerUser = async (req, res, next) => {
     const errors = validationResult(req);
@@ -182,3 +183,25 @@ module.exports.signoutUser = async (req, res) => {
         });
     }
 }
+
+module.exports.isDonateFormSubmitted = async (req, res) => {
+    const user = req.user;
+    try {
+        const response = await DonateBloodModel.findOne({ user: user._id });
+        if (response) {
+            return res.status(200).json({ 
+                submitted: true, 
+                form: response 
+            });
+        }
+        return res.status(200).json({ 
+            submitted: false,
+            msg: 'form not submitted'
+        });
+    } catch (error) {
+        return res.status(500).json({ 
+            error: "Server error",
+            details: error.message 
+        });
+    }
+};

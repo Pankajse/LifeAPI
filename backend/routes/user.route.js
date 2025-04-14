@@ -2,19 +2,21 @@ const express = require("express")
 const router = express.Router();
 const userController = require("../controllers/user.controller");
 const validate = require("../middlewares/user.validation");
-const { authUser } = require("../middlewares/auth.middleware");
+const { auth } = require("../middlewares/auth.middleware");
 
 
 router.post("/signup",validate.userRegisterValidationRules,userController.registerUser)
 
 router.post("/signin",validate.userLoginValidationRules,userController.signinUser)
 
-router.get("/me",authUser,userController.getUserProfile)
+router.get("/me",auth,userController.getUserProfile)
 
-router.put("/updateProfile",authUser,validate.userUpdateValidationRules,userController.updateUserProfile)
+router.put("/updateProfile",auth,validate.userUpdateValidationRules,userController.updateUserProfile)
 
-router.delete("/deleteProfile",authUser,userController.deleteUserProfile)
+router.delete("/deleteProfile",auth,userController.deleteUserProfile)
 
-router.post("/logout",authUser,userController.signoutUser)
+router.post("/logout",auth,userController.signoutUser)
+
+router.get("/is-donate-form-submitted",auth,userController.isDonateFormSubmitted)
 
 module.exports = router

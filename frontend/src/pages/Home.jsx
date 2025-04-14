@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import calendarLogo from '../assets/icons/calendarLogo.png';
 import sheildLogo from '../assets/icons/sheild.png';
 import poster1 from '../assets/images/poster1.jpg';
@@ -14,10 +14,17 @@ import emergencyNoLogo from '../assets/icons/emergencyNoLogo.png';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../context/UserContext';
+import { SocketContext } from '../context/SocketContext';
 
 const Home = () => {
+
     const navigate = useNavigate();
     const {user} = useContext(UserDataContext);
+    const { socket } = useContext(SocketContext);
+
+    useEffect(() => {
+        socket.emit('join', { userId: user._id, userType: 'user' });
+      }, [user]);
 
     return (
         <div className="min-h-screen bg-red-800">
@@ -78,7 +85,7 @@ const Home = () => {
                         { logo: requestLogo, title: 'Request Blood', onClick: () => navigate('/request-blood') },
                         { logo: bloodBankLogo, title: 'Blood Bank', onClick: () => {} },
                         { logo: chatIcon, title: 'Chatbot', onClick: () => {navigate('/chatbot')} },
-                        { logo: inbox, title: 'Inbox', onClick: () => {} },
+                        { logo: inbox, title: 'Inbox', onClick: () => {navigate('/chats')} },
                         { logo: emergencyNoLogo, title: 'Emergency Numbers', onClick: () => {} },
                     ].map((item, index) => (
                         <button

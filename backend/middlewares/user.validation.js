@@ -5,8 +5,8 @@ const userRegisterValidationRules = [
   body("fullname").isString().withMessage("Name should be string").
     isLength({ min: 3 }).withMessage("Name should be more than 3 characters"),
 
-  body("email").isEmail().withMessage("Email should be more than 8 characters").
-    isLength({ min: 5 }).withMessage("Enter valid Email").normalizeEmail(),
+  body("email").isEmail().withMessage("Enter valid email").
+    isLength({ min: 5 }).withMessage("Email more than 5 characters").normalizeEmail(),
 
   body("password").notEmpty().withMessage('Password is required')
   .isLength({ min: 8 }).withMessage('Password should be more than 8 characters'),

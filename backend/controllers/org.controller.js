@@ -4,6 +4,8 @@ const { BlacklistTokenModel } = require("../models/blacklist.model");
 const orgService = require("../services/org.service");
 const BloodStockModel = require("../models/bloodStock.model");
 const BloodDonationOrgModel = require("../models/donateBloodOrg.model");
+const RequestBloodOrgModel = require("../models/requestBloodOrg.model");
+const bloodServices = require("../services/blood.service");
 
 module.exports.signup = async (req, res, next) => {
     const errors = validationResult(req);
@@ -272,3 +274,77 @@ module.exports.getDonateBloodOrg = async(req, res) => {
         });
     }
 }
+
+module.exports.requestBloodformOrg = async(req,res)=>{
+    try{
+        const org = req.org;
+        const {bloodType,amount} = req.body;
+        const requestForm = await bloodServices.requestBloodFormOrg({org : org._id,bloodType,amount});
+        if(!requestForm){
+            return res.status(400).json({message : "Request blood form not submited"})
+        }
+
+        return res.status(200).json({message : "Request blood form Submitted", requestForm})
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({message : "Internal Server Error",error});
+    }
+}
+
+module.exports.nearbydonorsOrgsByBloodType = async (req, res) => {
+    const org = req.org;
+    try {
+        const requestBloodForm = await RequestBloodOrgModel.findOne({ organization : org._id });
+        if (!requestBloodForm) {
+            return res.status(400).json({ message: "Request blood form not found" });
+        }
+        const bloodType = requestBloodForm.bloodType;
+        const nearbyDonors = await bloodServices.nearbyDonorsByBloodType(org.location, bloodType);
+        const nearbyOrgs = await bloodServices.nearbyOrgsByBloodType(org.location, bloodType);
+         // Transform donors data
+         const transformedDonors = nearbyDonors.map(donor => ({
+            _id: donor.user._id,
+            name: donor.user.fullname,
+            type: 'user',
+            distance: donor.distance,
+            duration: donor.duration,
+            bloodGroup: donor.bloodType,
+            units: null, // Empty for users
+            contact: donor.contact,
+            availability: donor.availability.date,
+            weight: donor.weight,
+            age: donor.age,
+            location: donor.location,
+            email: donor.user.email
+        }));
+
+        // Transform organizations data
+        const transformedOrgs = nearbyOrgs.map(org => ({
+            _id: org._id,
+            name: org.orgName,
+            type: org.orgType,
+            distance: org.distance,
+            duration: org.duration,
+            bloodGroup: null, // Empty for organizations (since they have multiple)
+            units: org.donateBlood.totalUnits,
+            contact: org.contactNumber,
+            availability: null, // Empty for organizations
+            weight: null, // Empty for organizations
+            age: null, // Empty for organizations
+            location: org.location,
+            email: org.email,
+            bloodStock: org.donateBlood.bloodGroups // Include full blood stock details
+        }));
+
+        // Combine results
+        const results = [...transformedDonors, ...transformedOrgs];
+
+        return res.status(200).json({ 
+            message: "Nearby donors and organizations found", 
+            results 
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal Server Error", error });
+    }
+};
