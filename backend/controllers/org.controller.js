@@ -92,13 +92,41 @@ module.exports.signin = async (req, res, next) => {
     }
 };
 
+// module.exports.getProfile = async (req, res) => {
+//     const org = req.org;
+//     const totalUnits = await BloodStockModel.findOne({organization : orgs._id});
+//     res.status(200).json({
+//         msg: "Organization profile",
+//         org: org,
+//         totalUnits
+//     });
+// };
 module.exports.getProfile = async (req, res) => {
-    const org = req.org;
-    res.status(200).json({
+    try {
+      const org = req.org;
+  
+      const stock = await BloodStockModel.findOne({ organization: org._id });
+  
+      if (!stock) {
+        return res.status(404).json({ msg: "Blood stock not found for this organization" });
+      }
+  
+      // Calculate total units across all blood groups
+      const totalUnits = Object.entries(stock.toObject())
+        .filter(([key]) => ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].includes(key))
+        .reduce((sum, [_, value]) => sum + value, 0);
+  
+      res.status(200).json({
         msg: "Organization profile",
-        org: org
-    });
-};
+        org,
+        totalUnits
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ msg: "Error fetching profile", error: error.message });
+    }
+  };
+  
 
 module.exports.signout = async (req, res) => {
     const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(" ")[1]);
@@ -168,30 +196,36 @@ module.exports.bloodStock= async(req,res)=>{
     }
 }
 
-module.exports.bloodStockUpdate= async(req,res)=>{
+module.exports.bloodStockUpdate = async (req, res) => {
     const org = req.org;
+  
     try {
-        const {bloodType,units,action} = req.body;
-        const updatedStock = await BloodStockModel.updateStock(org._id,bloodType,units,action);
-        if(!updatedStock){
-            return res.status(400).json({msg : "Blood Stock not updated"});
-        }
-        const bloodStoc = {
-            "A+" : updatedStock["A+"],
-            "B+" : updatedStock["B+"],
-            "AB+" : updatedStock["AB+"],
-            "O+" : updatedStock["O+"],
-            "A-" : updatedStock["A-"],
-            "B-" : updatedStock["B-"],
-            "AB-": updatedStock["AB-"],
-            "O-" : updatedStock["O-"],
-        }
-        return res.status(200).json({msg : "Blood Stock updated",updatedStock});
+      const { bloodType, units, action } = req.body;
+  
+      // Update blood stock
+      const updatedStock = await BloodStockModel.updateStock(org._id, bloodType, units, action);
+      if (!updatedStock) {
+        return res.status(400).json({ msg: "Blood Stock not updated" });
+      }
+  
+      // Get the donation stock for this organization
+      const donationStock = await BloodDonationOrgModel.findOne({ organization: org._id });
+  
+      if (donationStock && donationStock.bloodGroups[bloodType] > updatedStock[bloodType]) {
+        // Update only that blood group to match updated stock
+        await BloodDonationOrgModel.findOneAndUpdate(
+          { organization: org._id },
+          { $set: { [`bloodGroups.${bloodType}`]: updatedStock[bloodType] } }
+        );
+      }
+  
+      return res.status(200).json({ msg: "Blood Stock updated", updatedStock });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({msg : "Error updating Blood Stock",error});
+      console.log(error);
+      return res.status(400).json({ msg: "Error updating Blood Stock", error: error.message });
     }
-}
+  };
+  
 
 module.exports.donateBloodOrg = async (req, res) => {
     const org = req.org;

@@ -8,7 +8,7 @@ const locationRoutes = require("./routes/location.route")
 const chatbotRoutes = require("./routes/chatbot.route")
 const bloodRoutes = require("./routes/blood.route")
 const orgRoutes = require("./routes/org.route")
-const chatRoutes = require("./routes/chat.route")
+const chatRoutes = require('./routes/chat.route');
 
 const app = express();
 mongoose.connect(process.env.DB_URL,{useNewUrlParser : true,useUnifiedTopology : true})
@@ -34,7 +34,8 @@ app.use('/location',locationRoutes);
 app.use('/chatbot',chatbotRoutes);
 app.use('/bloodServices',bloodRoutes);
 app.use('/org',orgRoutes);
-app.use('/chats',chatRoutes);
+app.use('/api/chat', chatRoutes);
+
 
 
 module.exports = app

@@ -1,30 +1,16 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-const NavbarOrg = () => {
-    const location = useLocation();
+const Navbar = () => {
+  return (
+    <div className='flex justify-evenly pt-2 w-full bg-white fixed bottom-0'>
+        <Link to='/events' className='text-center'> <i className="ri-calendar-event-line font-medium text-3xl"></i> <h4 className='font-medium'>Events</h4> </Link>
+        <Link to='/chatbot' className='text-center'> <i className="ri-message-3-fill font-medium text-3xl"></i> <h4 className='font-medium'>Chatbot</h4> </Link>
+        <Link to='/home-org' className=' bg-red-800  rounded-full  px-4 py-4 relative bottom-5 '> <i className="ri-home-8-line font-medium text-4xl text-white"></i> </Link>
+        <Link to='/donate-blood-org' className='text-center'> <i className="ri-hand-heart-line font-medium text-3xl"></i> <h4 className='font-medium'>Donate</h4> </Link>
+        <Link to='/blood-stock' className='text-center'> <i className="ri-user-3-line font-medium text-3xl"></i> <h4 className='font-medium'>Stock</h4> </Link>
+    </div>
+  )
+}
 
-    return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
-            <div className="flex justify-around items-center p-2">
-                {[
-                    { icon: 'ri-home-4-line', path: '/org/home', active: location.pathname === '/org/home' },
-                    { icon: 'ri-drop-line', path: '/org/blood-stock', active: location.pathname.includes('blood-stock') },
-                    { icon: 'ri-group-line', path: '/org/donors', active: location.pathname.includes('donors') },
-                    { icon: 'ri-calendar-line', path: '/org/campaigns', active: location.pathname.includes('campaigns') },
-                    { icon: 'ri-user-settings-line', path: '/org/settings', active: location.pathname.includes('settings') },
-                ].map((item, index) => (
-                    <Link
-                        key={index}
-                        to={item.path}
-                        className={`p-3 rounded-full ${item.active ? 'bg-red-100 text-red-800' : 'text-gray-600'}`}
-                    >
-                        <i className={`${item.icon} text-2xl`}></i>
-                    </Link>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-export default NavbarOrg;
+export default Navbar

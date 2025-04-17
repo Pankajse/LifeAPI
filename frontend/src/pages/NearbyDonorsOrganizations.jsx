@@ -11,7 +11,7 @@ const NearbyDonorsOrganizations = () => {
     const fetchNearbyDonorsOrgs = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/org/nearby-donors-orgs', {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/org/nearby-donors-orgs`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -41,8 +41,8 @@ const NearbyDonorsOrganizations = () => {
       setRequestedIds(prev => [...prev, id]);
       
       await axios.post(
-        'http://localhost:3000/chats/connect',
-        { otherUserId: id, type : 'org' },
+        `${import.meta.env.VITE_BASE_URL}/api/chat/start`,
+        { participantId : id },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`

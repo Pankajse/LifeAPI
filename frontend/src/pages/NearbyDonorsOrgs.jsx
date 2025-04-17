@@ -41,8 +41,8 @@ const NearbyDonorsOrgs = () => {
       setRequestedIds(prev => [...prev, id]);
       
       await axios.post(
-        'http://localhost:3000/chats/connect',
-        { otherUserId: id, type : "user" },
+        `${import.meta.env.VITE_BASE_URL}/api/chat/start`,
+        { participantId : id },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`

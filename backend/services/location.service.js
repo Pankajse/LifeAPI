@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { UserModel } = require("../models/user.model");
 const DonateBloodModel = require("../models/donateBlood.model");
 const OrgModel = require("../models/org.model");
 
@@ -63,6 +62,30 @@ module.exports.getAddressCoordinates = async (address) => {
         throw error;
     }
 }
+
+module.exports.getAddressFromCoordinates = async (ltd, lng) => {
+    if (!ltd || !lng) {
+        throw new Error("Latitude and longitude are required");
+    }
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${ltd},${lng}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    
+    try {
+        const response = await axios.get(url);
+        const data = response.data;
+        
+        if (data.status === "OK") {
+            // Return the formatted address from the first result
+            return data.results[0].formatted_address;
+        } else {
+            throw new Error("Error fetching data from Google Maps API: " + data.status);
+        }
+    } catch (error) {
+        console.error("Error in getAddressFromCoordinates:", error);
+        throw error;
+    }
+};
+
 
 module.exports.getUsersInTheRadius = async (ltd, lng, radius) => {
     if(!ltd || !lng || !radius){

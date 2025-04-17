@@ -4,7 +4,6 @@ import Start from './pages/Start'
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
 import Home from './pages/Home';
-import Navbar from './components/Navbar';
 import RequestBlood from './pages/RequestBlood';
 import RequestBloodOrg from './pages/RequestBloodOrg';
 import DonateBlood from './pages/DonateBlood';
@@ -22,7 +21,8 @@ import BloodStock from './pages/BloodStock';
 import DonateBloodOrg from './pages/DonateBloodOrg';
 import NearbyDonorsOrganizations from './pages/NearbyDonorsOrganizations';
 import ChatList from './pages/ChatList';
-import ChatListOrg from './pages/ChatListOrg';
+import ChatInterface from './pages/ChatInterface';
+import Event from './pages/Event';
 
 export const App = () => {
   return (
@@ -48,7 +48,9 @@ export const App = () => {
       <Route path='/chatbot' element={<Chatbot/>} />
       <Route path='/blood-stock' element={<BloodStock/>} />
       <Route path="/chats" element={<ChatList />} />
-      <Route path="/chats-org" element={<ChatListOrg />} />
+      <Route path="/events" element={<Event />} />
+      <Route path="/chats-org" element={<ChatList />} />
+      <Route path="/chats/:chatId" element={<ChatInterface />} />
     </Routes>
   )
 }

@@ -12,7 +12,7 @@ import { SocketContext } from '../context/SocketContext';
 
 const HomeOrg = () => {
     const navigate = useNavigate();
-    const { org } = useContext(OrgDataContext);
+    const { org,totalUnits } = useContext(OrgDataContext);
     const { socket } = useContext(SocketContext);
     useEffect(() => {
             socket.emit('join', { userId: org._id, userType: 'org' });
@@ -38,7 +38,7 @@ const HomeOrg = () => {
                     </div>
                     <i 
                         className="ri-notification-2-line text-3xl text-white cursor-pointer hover:text-red-300 transition-all"
-                        onClick={() => navigate('/org/notifications')}
+                        onClick={() => navigate('/chats')}
                     ></i>
                 </div>
 
@@ -46,18 +46,18 @@ const HomeOrg = () => {
                 <div className="flex justify-between gap-4">
                     <div 
                         className="flex items-center gap-3 bg-white/10 p-3 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all cursor-pointer"
-                        onClick={() => navigate('/org/blood-stock')}
+                        onClick={() => navigate('/blood-stock')}
                     >
                         <img className="w-10 h-10" src={bloodStockLogo} alt="bloodStock" />
                         <div className="flex flex-col">
                             <h4 className="text-lg font-medium text-white">Blood Stock</h4>
-                            <p className="text-sm font-normal text-white">{org?.bloodUnits || 0} units available</p>
+                            <p className="text-sm font-normal text-white">{totalUnits || 0} units available</p>
                         </div>
                     </div>
 
                     <div 
                         className="flex items-center gap-3 bg-white/10 p-3 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all cursor-pointer"
-                        onClick={() => navigate('/org/donate-blood')}
+                        onClick={() => navigate('/donate-blood-org')}
                     >
                         <img className="w-10 h-10" src={donateLogo} alt="donate" />
                         <div className="flex flex-col">
@@ -93,8 +93,8 @@ const HomeOrg = () => {
                         },
                         { 
                             logo: campaignLogo, 
-                            title: 'Campaigns', 
-                            onClick: () => navigate('/org/campaigns'),
+                            title: 'Events', 
+                            onClick: () => navigate('/events'),
                             description: 'Manage drives'
                         },
                         { 

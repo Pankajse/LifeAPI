@@ -1,36 +1,38 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios';
 
-export const OrgDataContext = createContext();
+export const useAuth = createContext();
 
-const OrgContext = ({ children }) => {
+const AuthContext = ({children}) => {
+    const [user, setUser] = useState(null);
     const [org, setOrg] = useState(null);
-    const [totalUnits, setTotalUnits] = useState(0)
+    const [type, setType] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchOrgData = async () => {
+        const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/org/me`, {
+                    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/chat/auth-data`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
                     if (response.status === 200) {
+                        setUser(response.data.user);
                         setOrg(response.data.org);
-                        setTotalUnits(response.data.totalUnits);
+                        setType(response.data.type);
                     }
                 }
             } catch (error) {
-                console.error("Error fetching organization data:", error);
+                console.error("Error fetching user data:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchOrgData();
+        fetchUserData();
     }, []);
 
     if (loading) {
@@ -38,10 +40,10 @@ const OrgContext = ({ children }) => {
     }
 
     return (
-        <OrgDataContext.Provider value={{ org, setOrg, totalUnits }}>
+        <useAuth.Provider value={{user, org, type}}>
             {children}
-        </OrgDataContext.Provider>
+        </useAuth.Provider>
     );
-};
+}
 
-export default OrgContext;
+export default AuthContext;

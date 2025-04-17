@@ -7,10 +7,12 @@ import { BrowserRouter } from 'react-router-dom'
 import UserContext from './context/UserContext'
 import OrgContext from './context/OrgContext'
 import SocketProvider from './context/SocketContext.jsx'
+import AuthContext from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SocketProvider>
+    <AuthContext>
     <OrgContext>
     <UserContext>
     <BrowserRouter>
@@ -18,6 +20,7 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
     </UserContext>
     </OrgContext>
+    </AuthContext>
     </SocketProvider>
   </StrictMode>,
 )

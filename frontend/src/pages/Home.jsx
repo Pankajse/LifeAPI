@@ -47,7 +47,7 @@ const Home = () => {
                 </div>
 
                 {/* Stats Section */}
-                <div className="flex justify-between gap-4">
+                <div  className="flex justify-between gap-4" onClick={() => navigate('/donate-blood')}>
                     <div className="flex items-center gap-3 bg-white/10 p-3 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all">
                         <img className="w-10 h-10" src={sheildLogo} alt="sheildLogo" />
                         <div className="flex flex-col">
@@ -83,7 +83,7 @@ const Home = () => {
                     {[
                         { logo: donateLogo, title: 'Donate Blood', onClick: () => navigate('/donate-blood') },
                         { logo: requestLogo, title: 'Request Blood', onClick: () => navigate('/request-blood') },
-                        { logo: bloodBankLogo, title: 'Blood Bank', onClick: () => {} },
+                        { logo: bloodBankLogo, title: 'Events', onClick: () => navigate('/events') },
                         { logo: chatIcon, title: 'Chatbot', onClick: () => {navigate('/chatbot')} },
                         { logo: inbox, title: 'Inbox', onClick: () => {navigate('/chats')} },
                         { logo: emergencyNoLogo, title: 'Emergency Numbers', onClick: () => {} },
