@@ -32,22 +32,6 @@ module.exports.requestBloodform = async(req,res)=>{
     }
 }
 
-// module.exports.nearbydonorsOrgsByBloodType = async (req, res) => {
-//     const user = req.user;
-//     try {
-//         const requestBloodForm = await RequestBloodModel.findOne({ user : user._id });
-//         if (!requestBloodForm) {
-//             return res.status(400).json({ message: "Request blood form not found" });
-//         }
-//         const bloodType = requestBloodForm.bloodType;
-//         const nearbyDonors = await bloodServices.nearbyDonorsByBloodType(requestBloodForm.location, bloodType);
-//         const nearbyOrgs = await bloodServices.nearbyOrgsByBloodType(requestBloodForm.location, bloodType);
-//         return res.status(200).json({ message: "Nearby donors and organizations found", nearbyDonors, nearbyOrgs });
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({ message: "Internal Server Error", error });
-//     }
-// };
 
 module.exports.nearbydonorsOrgsByBloodType = async (req, res) => {
     const user = req.user;

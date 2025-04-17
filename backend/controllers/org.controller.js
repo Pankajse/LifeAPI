@@ -92,15 +92,7 @@ module.exports.signin = async (req, res, next) => {
     }
 };
 
-// module.exports.getProfile = async (req, res) => {
-//     const org = req.org;
-//     const totalUnits = await BloodStockModel.findOne({organization : orgs._id});
-//     res.status(200).json({
-//         msg: "Organization profile",
-//         org: org,
-//         totalUnits
-//     });
-// };
+
 module.exports.getProfile = async (req, res) => {
     try {
       const org = req.org;
