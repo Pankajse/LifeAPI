@@ -23,10 +23,6 @@ This project is a **Blood Donation Management System** designed to connect blood
 - **Nearby Donors & Organizations**: Organizations can find nearby donors and other organizations.
 - **Chat System**: Organizations can communicate with donors or other organizations via a chat interface.
 
-### 3. **Admin Features**
-- **Dashboard**: Admins can monitor user and organization activities.
-- **Data Management**: Admins can manage blood stock, donation requests, and user/organization data.
-
 ---
 
 ## How It Works
