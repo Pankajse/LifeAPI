@@ -1,6 +1,6 @@
-# Blood Donation Website
+# LifeAPI
 
-This project is a **Blood Donation Management System** designed to connect blood donors, recipients, and organizations like blood banks, hospitals, and NGOs. It provides a platform for users to donate blood, request blood, and manage blood stock efficiently.
+This project LifeAPI is a **Blood Donation website** designed to connect blood donors, recipients, and organizations like blood banks, hospitals, and NGOs. It provides a platform for users to donate blood, request blood, and manage blood stock efficiently.
 
 ---
 
